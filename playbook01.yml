@@ -1,0 +1,46 @@
+---
+- name: bootstrapping and user creation
+  hosts: raiders
+  gather_facts: no
+
+  vars_files:
+    - vars/newusers1.yml
+    - vars/newusers1.yml
+    - vars/aptpkgs.yml
+    
+  tasks:
+  - name: update apt with latest repo
+    raw: "apt update -y"
+    become: yes
+
+  ## ensure python3 is installed on indy
+  - name: "Bootstrap python3 install"
+    raw: "apt install -y {{ item }}"
+    loop: "{{ bootstrap_packages }}"
+    become: yes
+
+    ## use the apt module to deploy apps
+  - name: "Apt install packages"
+    apt:
+      name: "{{ apt_pkgs }}"
+    become: yes
+
+  - name: Create new group
+    group:
+      name: sandbox
+      state: present
+    become: yes
+
+    # create new user on target system
+  - name: Add new users to group 'sandbox'
+    user:
+      name: "{{ item }}"
+      comment: throwaway user account for testing
+      state: present
+      shell: /bin/bash       # Defaults to /bin/bash
+      system: no             # Defaults to no
+      createhome: yes        # Defaults to yes
+      group: sandbox
+    become: yes
+    loop: "{{ users1 }}"
+
