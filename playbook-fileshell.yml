@@ -1,0 +1,17 @@
+---
+- name: As simple file book
+  hosts: planetexpress
+  gather_facts: no
+  connection: ssh
+
+  tasks:
+    - name: make a directory
+      ansible.builtin.file:
+        path: ~/output/
+        state: directory
+
+
+    - name: use shell with wildcarding
+      ansible.builtin.copy: 
+        dest: ~/output/path.txt
+        content: "{{ ansible_env.HOME }}"
