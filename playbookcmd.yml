@@ -1,0 +1,11 @@
+---
+- name: A simple play to test ansible.cfg
+  hosts: localhost
+  connection: local 
+  gather_facts: True
+
+  tasks:
+
+  - name: Issue a date cmd on each remmote hosts
+    command: date
+
