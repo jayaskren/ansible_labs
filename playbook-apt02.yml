@@ -1,0 +1,15 @@
+---
+- name: Ouur first play
+  hosts: planetexpress
+  connection: ssh
+  gather_facts: true
+
+  tasks:
+    - name:
+      ansible.builtin.apt:
+        name: sl
+        state: present
+      become: yes
+      when: ansible_distribution == "Ubuntu"
+
+
