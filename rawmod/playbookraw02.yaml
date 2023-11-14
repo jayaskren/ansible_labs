@@ -1,0 +1,17 @@
+---
+- name: Exploring Ansible raw
+  hosts: tx_mid_svr
+  connection: ssh
+  gather_facts: yes
+  
+  tasks:
+  - name: Create a file over ssh
+    copy: 
+      content: "{{ ansible_env.LOGNAME }}"
+      dest: newfile01.txt
+      force: yes
+  - name: Create a second file over ssh
+    copy:
+      content: "Hello world"
+      dest: newfile02.txt
+      force: yes
