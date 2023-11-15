@@ -1,0 +1,64 @@
+--- 
+- name: Install Nginx
+  hosts: planetexpress:!farnsworth
+  connection: ssh
+  become: yes 
+
+  tasks:
+    - name: Debug
+      ansible.builtin.debug:
+        var: ansible_facts['lsb']
+
+    - name: Debug
+      ansible.builtin.debug:
+        var: ansible_facts['distribution']
+
+    - name: Debug
+      ansible.builtin.debug:
+        var: ansible_facts['distribution_version']
+
+    - name: Install Nginx
+      ansible.builtin.package:
+        name: nginx
+        state: present
+    
+
+
+- name: Create Website
+  hosts: planetexpress
+  connection: ssh
+  become: yes
+
+  tasks:
+
+    - name: Copy Nginx Config 
+      ansible.builtin.template:
+        src: nginx/sites-enabled.j2
+        dest: /etc/nginx/sites-enabled
+        mode: u=rw,g=r,o=r
+      notify: 
+        - Restart Service
+
+    - name: Make Sure Directory Exists
+      ansible.builtin.file:
+        path: /var/www/site/
+        state: directory
+      notify: 
+        - Restart Service
+
+    - name: Copy Web Page 
+      ansible.builtin.template:
+        src: nginx/index.html.j2
+        dest: /var/www/site/index.html
+        mode: u=rw,g=r,o=r
+      notify: 
+        - Restart Service
+
+  handlers:
+    - name: Restart Service
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+        
+
+

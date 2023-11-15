@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hello, Nginx!</title>
+</head>
+<body>
+    <h1>Status of {{ ansible_facts['hostname'] }}</h1>
+    <ul>
+    <p>OS: {{ ansible_facts['distribution'] }} - {{ ansible_facts['distribution_version'] }}</p>
+    </ul>
+    <p>
+        {{ ansible_facts }}
+    </p>
+</body>
+</html>
