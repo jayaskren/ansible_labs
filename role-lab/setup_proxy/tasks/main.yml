@@ -1,0 +1,17 @@
+---
+# tasks file for setup_proxy
+
+- name: Install Nginx
+  become: yes 
+  ansible.builtin.package:
+    name: nginx
+    state: present
+
+  - name: Copy Nginx Config
+    become: yes 
+    ansible.builtin.template:
+      src: sites-enabled.j2
+      dest: /etc/nginx/sites-enabledmkd.conf
+      mode: u=rw,g=r,o=r
+    notify: 
+      - Restart Service

@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Status of {{ ansible_facts['hostname'] }} ({{ ansible_facts.default_ipv4.address }})</title>
+</head>
+<style>
+table, th, td {
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+th, td {
+  background-color: #ADD8E6;
+  padding: 10px;
+}
+</style>
+<body>
+    <h1>Status of {{ ansible_facts['hostname'] }} ({{ ansible_facts.default_ipv4.address }}) </h1>
+    <table>
+        <tr><th>Name</th> <th>Value</th></tr>
+        <tr><td>OS</td> <td>{{ ansible_facts['lsb']['description'] }}</td> </tr>
+        <tr><td>Memory Total</td> <td>{{ ansible_facts['memory_mb']['real']['total'] }} MB</td> </tr>
+        <tr><td>Free Memory</td> <td>{{ (100*(ansible_facts.memory_mb.real.free/ansible_facts.memory_mb.real.total))|round }}%</td> </tr>
+        <tr><td>Uptime</td> <td>{{ ansible_facts['uptime_seconds'] }} seconds</td> </tr>
+    </table>
+
+    <h3>Storage</h3>
+    <table>
+        <tr><th>Mount</th> <th>Percent Free</th></tr>
+        {% for mount in ansible_facts.mounts %}
+        <tr><td> {{ mount.mount }}</td> <td>{{ (100*(mount.size_available/mount.size_total))|round }} %</td> </tr>
+        {% endfor %}
+        
+    </table>
+</body>
+</html>
+

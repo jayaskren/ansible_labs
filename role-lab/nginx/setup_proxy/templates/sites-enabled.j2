@@ -1,0 +1,18 @@
+server {
+       listen 80;
+       listen [::]:80;
+
+       server_name example.ubuntu.com;
+
+       location /fry {
+              proxy_pass http://fry:80;
+       }
+       
+       location /bender {
+              proxy_pass http://bender:80;
+       }
+
+       location /zoidberg {
+              proxy_pass http://zoidberg:80;
+       }
+}

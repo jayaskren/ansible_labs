@@ -1,0 +1,10 @@
+---
+# tasks file for main_role
+- hosts: planetexpress:!farnsworth
+  roles:
+    - nginx
+
+- hosts: localhost
+  connection: local
+  roles: 
+    - setup_proxy

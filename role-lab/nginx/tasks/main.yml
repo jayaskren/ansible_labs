@@ -1,0 +1,65 @@
+--- 
+# - name: Install Nginx
+#   hosts: prod
+#   connection: ssh
+#   become: yes 
+
+#   tasks:
+  # - name: Debug
+  #   ansible.builtin.debug:
+  #     var: ansible_facts['lsb']
+
+  # - name: Debug
+  #   ansible.builtin.debug:
+  #     var: ansible_facts['distribution']
+
+  # - name: Debug
+  #   ansible.builtin.debug:
+  #     var: ansible_facts['distribution_version']
+
+  - name: Install Nginx
+    become: yes 
+    ansible.builtin.package:
+      name: nginx
+      state: present
+  
+  - name: Make Sure Directory Exists
+    become: yes 
+    ansible.builtin.file:
+      path: /var/www/site/
+      state: directory
+      
+    notify: 
+      - Restart Service
+
+  - name: Copy Web Page 
+    become: yes 
+    ansible.builtin.template:
+      src: index.html.j2
+      dest: /var/www/html/index.nginx-debian.html
+      mode: u=rw,g=r,o=r
+    notify: 
+      - Restart Service
+
+  - name: Get Public IP Address
+    become: yes 
+    ansible.builtin.uri:
+      url: https://api.ipify.org?format=json
+      return_content: true
+    register: public_ip
+
+  # handlers:
+    
+
+
+# - name: Create Website
+#   # hosts: prod
+#   connection: ssh
+#   become: yes
+
+#   tasks:
+
+    
+        
+
+
